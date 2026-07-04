@@ -331,10 +331,18 @@ export default function PropertyForm() {
     .filter(Boolean)
   )).sort();
 
+  // Nominatim bazen ilçeyi şehir gibi döndürür (ör. Alanya -> Antalya'nın ilçesi).
+  // Bu yüzden form.city hem city_label hem district ile eşleşirse kabul edilir.
+  const cityMatches = (l) => {
+    if (!form.city) return true;
+    const c = normalizeText(form.city);
+    return normalizeText(l.city_label || l.city) === c || normalizeText(l.district) === c;
+  };
+
   const availableDistricts = Array.from(new Set(locations
     .filter(l =>
       (!form.country || normalizeText(l.country) === normalizeText(form.country)) &&
-      (!form.city || normalizeText(l.city_label || l.city) === normalizeText(form.city))
+      cityMatches(l)
     )
     .map(l => l.district)
     .filter(Boolean)
@@ -343,7 +351,7 @@ export default function PropertyForm() {
   const availableNeighborhoods = Array.from(new Set(locations
     .filter(l =>
       (!form.country || normalizeText(l.country) === normalizeText(form.country)) &&
-      (!form.city || normalizeText(l.city_label || l.city) === normalizeText(form.city)) &&
+      cityMatches(l) &&
       (!form.district || normalizeText(l.district) === normalizeText(form.district))
     )
     .map(l => l.neighborhood)
