@@ -82,10 +82,10 @@ const AuthenticatedApp = () => {
         <Route path="/properties" element={<Properties />} />
         <Route path="/properties/new" element={<PropertyForm />} />
         <Route path="/properties/:id" element={<PropertyForm />} />
-        
+
         {/* YENİ EKLENEN STRATEJİK ADIM ROTASI */}
         <Route path="/properties/step2/:id" element={<PropertyForm2 />} />
-        
+
         <Route path="/projects" element={<Projects />} />
         <Route path="/projects/new" element={<ProjectForm />} />
         <Route path="/projects/:id" element={<ProjectForm />} />

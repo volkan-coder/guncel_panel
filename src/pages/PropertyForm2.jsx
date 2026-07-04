@@ -387,9 +387,9 @@ export default function PropertyForm2() {
     
     if (slugLower.includes('citizen') || slugLower.includes('vatandas')) dynamicBooleans.citizenship_eligible = !isSelected;
     if (slugLower.includes('residen') || slugLower.includes('ikamet')) dynamicBooleans.residency_eligible = !isSelected;
-    if (slugLower.includes('sea-view') || slugLower.includes('deniz-manz')) dynamicBooleans.sea_view = !isSelected;
-    if (slugLower.includes('seafront') || slugLower.includes('denize-sifir')) dynamicBooleans.seafront = !isSelected;
-    if (slugLower.includes('near-sea') || slugLower.includes('denize-yakin')) dynamicBooleans.near_the_sea = !isSelected;
+    if (slugLower.includes('sea_view') || slugLower.includes('sea-view') || slugLower.includes('deniz_manz') || slugLower.includes('deniz-manz')) dynamicBooleans.sea_view = !isSelected;
+    if (slugLower.includes('seafront') || slugLower.includes('denize_sifir') || slugLower.includes('denize-sifir')) dynamicBooleans.seafront = !isSelected;
+    if (slugLower.includes('near_the_sea') || slugLower.includes('near-sea') || slugLower.includes('denize_yakin') || slugLower.includes('denize-yakin')) dynamicBooleans.near_the_sea = !isSelected;
 
     setForm(prev => ({
       ...prev,
@@ -421,7 +421,7 @@ export default function PropertyForm2() {
       } else if (type === 'sea_view') {
         const nextVal = !prev.sea_view;
         updates.sea_view = nextVal;
-        toggleSlugHelper(findSlug('sea-view'), nextVal);
+        toggleSlugHelper(findSlug('sea_view') || findSlug('sea-view'), nextVal);
       } else if (type === 'seafront') {
         const nextVal = !prev.seafront;
         updates.seafront = nextVal;
@@ -429,13 +429,13 @@ export default function PropertyForm2() {
       } else if (type === 'near_the_sea') {
         const nextVal = !prev.near_the_sea;
         updates.near_the_sea = nextVal;
-        toggleSlugHelper(findSlug('near-sea') || findSlug('denize-yakin') || 'near-the-sea', nextVal);
+        toggleSlugHelper(findSlug('near_the_sea') || findSlug('near-sea') || findSlug('denize_yakin') || findSlug('denize-yakin') || 'near_the_sea', nextVal);
       } else if (type === 'furniture') {
         const slug = findSlug('furnit') || findSlug('mobilya') || 'furniture';
         const nextVal = !updatedFeatures.includes(slug);
         toggleSlugHelper(slug, nextVal);
       } else if (type === 'white_goods') {
-        const slug = findSlug('white-goods') || findSlug('beyaz-esya') || 'white-goods';
+        const slug = findSlug('white_goods') || findSlug('white-goods') || findSlug('beyaz_esya') || findSlug('beyaz-esya') || 'white_goods';
         const nextVal = !updatedFeatures.includes(slug);
         toggleSlugHelper(slug, nextVal);
       }
@@ -446,11 +446,11 @@ export default function PropertyForm2() {
 
   const isCitizenshipActive = useMemo(() => form.citizenship_eligible || form.features?.some(f => f.toLowerCase().includes('citizen') || f.toLowerCase().includes('vatandas')), [form.citizenship_eligible, form.features]);
   const isResidencyActive = useMemo(() => form.residency_eligible || form.features?.some(f => f.toLowerCase().includes('residen') || f.toLowerCase().includes('ikamet')), [form.residency_eligible, form.features]);
-  const isSeaViewActive = useMemo(() => form.sea_view || form.features?.some(f => f.toLowerCase().includes('sea-view') || f.toLowerCase().includes('deniz-manz')), [form.sea_view, form.features]);
-  const isSeafrontActive = useMemo(() => form.seafront || form.features?.some(f => f.toLowerCase().includes('seafront') || f.toLowerCase().includes('denize-sifir')), [form.seafront, form.features]);
-  const isNearTheSeaActive = useMemo(() => form.near_the_sea || form.features?.some(f => f.toLowerCase().includes('near-sea') || f.toLowerCase().includes('denize-yakin')), [form.near_the_sea, form.features]);
+  const isSeaViewActive = useMemo(() => form.sea_view || form.features?.some(f => { const s = f.toLowerCase(); return s.includes('sea_view') || s.includes('sea-view') || s.includes('deniz_manz') || s.includes('deniz-manz'); }), [form.sea_view, form.features]);
+  const isSeafrontActive = useMemo(() => form.seafront || form.features?.some(f => { const s = f.toLowerCase(); return s.includes('seafront') || s.includes('denize_sifir') || s.includes('denize-sifir'); }), [form.seafront, form.features]);
+  const isNearTheSeaActive = useMemo(() => form.near_the_sea || form.features?.some(f => { const s = f.toLowerCase(); return s.includes('near_the_sea') || s.includes('near-sea') || s.includes('denize_yakin') || s.includes('denize-yakin'); }), [form.near_the_sea, form.features]);
   const isFurnitureActive = useMemo(() => form.features?.some(f => f.toLowerCase().includes('furnit') || f.toLowerCase().includes('esya') || f.toLowerCase().includes('mobilya')), [form.features]);
-  const isWhiteGoodsActive = useMemo(() => form.features?.some(f => f.toLowerCase().includes('white-goods') || f.toLowerCase().includes('beyaz-esya')), [form.features]);
+  const isWhiteGoodsActive = useMemo(() => form.features?.some(f => { const s = f.toLowerCase(); return s.includes('white_goods') || s.includes('white-goods') || s.includes('beyaz_esya') || s.includes('beyaz-esya'); }), [form.features]);
 
   const handleApplyBulkFeatures = () => {
     if (!bulkFeaturesText.trim()) return;
@@ -466,9 +466,9 @@ export default function PropertyForm2() {
           const s = slug.toLowerCase();
           if (s.includes('citizen') || s.includes('vatandas')) extraBooleans.citizenship_eligible = true;
           if (s.includes('residen') || s.includes('ikamet')) extraBooleans.residency_eligible = true;
-          if (s.includes('sea-view') || s.includes('deniz-manz')) extraBooleans.sea_view = true;
-          if (s.includes('seafront') || s.includes('denize-sifir')) extraBooleans.seafront = true;
-          if (s.includes('near-sea') || s.includes('denize-yakin')) extraBooleans.near_the_sea = true;
+          if (s.includes('sea_view') || s.includes('sea-view') || s.includes('deniz_manz') || s.includes('deniz-manz')) extraBooleans.sea_view = true;
+          if (s.includes('seafront') || s.includes('denize_sifir') || s.includes('denize-sifir')) extraBooleans.seafront = true;
+          if (s.includes('near_the_sea') || s.includes('near-sea') || s.includes('denize_yakin') || s.includes('denize-yakin')) extraBooleans.near_the_sea = true;
         });
         return { ...f, features: combinedFeatures, ...extraBooleans };
       });
@@ -546,9 +546,9 @@ export default function PropertyForm2() {
       html += `<h3><strong>Öne Çıkan Özellikler</strong></h3><ul>`;
       if (isCitizenshipActive) html += `<li>${getFeatureDbName('citizen', 'Citizenship')}</li>`;
       if (isResidencyActive) html += `<li>${getFeatureDbName('residen', 'Residence Permit')}</li>`;
-      if (isSeaViewActive) html += `<li>${getFeatureDbName('sea-view', 'Sea View')}</li>`;
+      if (isSeaViewActive) html += `<li>${getFeatureDbName('sea_view', 'Sea View')}</li>`;
       if (isSeafrontActive) html += `<li>${getFeatureDbName('seafront', 'Seafront')}</li>`;
-      if (isNearTheSeaActive) html += `<li>${getFeatureDbName('near-sea', 'Near the Sea')}</li>`;
+      if (isNearTheSeaActive) html += `<li>${getFeatureDbName('near_the_sea', 'Near the Sea')}</li>`;
       html += `</ul>`;
     }
 
@@ -689,6 +689,10 @@ export default function PropertyForm2() {
             </p>
           </div>
         </div>
+        <Button onClick={handleSubmit} disabled={mutation.isPending} className="sm:ml-auto gap-2 gradient-primary text-white border-0 hover:opacity-90 px-6 h-10 rounded-xl shadow-sm">
+          {mutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+          Portföyü Yayına Al
+        </Button>
       </div>
 
       {/* Tab Navigasyon */}
@@ -1147,7 +1151,7 @@ export default function PropertyForm2() {
                   >
                     <div className="text-xl">🏖️</div>
                     <span className="text-[11px] font-jakarta tracking-wide flex items-center gap-1">
-                      <Sparkles className="w-3.5 h-3.5 text-sky-600" /> seafront
+                      <Sparkles className="w-3.5 h-3.5 text-sky-600" /> Seafront
                     </span>
                   </div>
 
@@ -1886,7 +1890,7 @@ export default function PropertyForm2() {
       <div className="flex justify-end pt-2">
         <Button onClick={handleSubmit} disabled={mutation.isPending} className="gap-2 gradient-primary text-white border-0 hover:opacity-90 px-8 h-11 rounded-xl shadow-md font-bold text-sm">
           {mutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-          {activeTab === 'seo' ? 'Kaydet ve Test İlanı Gör' : 'Kaydet ve Sonraki Aşamaya Geç'}
+          Kaydet ve Sihirbazı Kapat
         </Button>
       </div>
     </div>
