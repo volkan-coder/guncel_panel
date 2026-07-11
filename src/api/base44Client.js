@@ -21,10 +21,19 @@ const ENTITY_TABLE_MAP = {
   User: 'users',
 };
 
+const COLUMN_ALIASES = {
+  created_date: 'created_at',
+  updated_date: 'updated_at',
+  published_date: 'published_date',
+};
+
+const resolveColumn = (col) => COLUMN_ALIASES[col] || col;
+
 const applyOrder = (query, order) => {
   if (!order) return query;
   const isDesc = order.startsWith('-');
-  const column = isDesc ? order.substring(1) : order;
+  const rawColumn = isDesc ? order.substring(1) : order;
+  const column = resolveColumn(rawColumn);
   return query.order(column, { ascending: !isDesc });
 };
 
@@ -46,7 +55,7 @@ const createEntityRepo = (entityName) => {
       if (filterObj && typeof filterObj === 'object') {
         for (const [key, value] of Object.entries(filterObj)) {
           if (value !== undefined && value !== null) {
-            query = query.eq(key, value);
+            query = query.eq(resolveColumn(key), value);
           }
         }
       }
