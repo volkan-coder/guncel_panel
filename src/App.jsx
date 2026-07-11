@@ -52,6 +52,15 @@ import PropertyCategories from '@/pages/PropertyCategories';
 import GemLinks from '@/pages/GemLinks';
 import RefNoLocation from '@/pages/RefNoLocation';
 
+// Public Website Pages
+import PublicLayout from '@/components/layout/PublicLayout';
+import PublicHome from '@/pages/public/PublicHome';
+import PublicListings from '@/pages/public/PublicListings';
+import PublicPropertyDetail from '@/pages/public/PublicPropertyDetail';
+import PublicBlog from '@/pages/public/PublicBlog';
+import PublicBlogDetail from '@/pages/public/PublicBlogDetail';
+import PublicContact from '@/pages/public/PublicContact';
+
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
 
@@ -77,6 +86,17 @@ const AuthenticatedApp = () => {
 
   return (
     <Routes>
+      {/* Public Website Routes */}
+      <Route element={<PublicLayout />}>
+        <Route path="/site" element={<PublicHome />} />
+        <Route path="/site/listings" element={<PublicListings />} />
+        <Route path="/site/property/:slug" element={<PublicPropertyDetail />} />
+        <Route path="/site/blog" element={<PublicBlog />} />
+        <Route path="/site/blog/:slug" element={<PublicBlogDetail />} />
+        <Route path="/site/contact" element={<PublicContact />} />
+      </Route>
+
+      {/* Admin Panel Routes */}
       <Route element={<AppLayout />}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/properties" element={<Properties />} />
@@ -128,6 +148,7 @@ const AuthenticatedApp = () => {
         <Route path="/gem-links" element={<GemLinks />} />
         <Route path="/ref-no-location" element={<RefNoLocation />} />
       </Route>
+      <Route path="/site/*" element={<PageNotFound />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
